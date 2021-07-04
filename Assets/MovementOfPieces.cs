@@ -16,7 +16,23 @@ public class MovementOfPieces : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if(Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow))
+        {
+            transform.position = transform.position + new Vector3(0, 1, 0);
+        }
+        if(Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow))
+        {
+            transform.position = transform.position + new Vector3(0, -1, 0);
+        }
+        if(Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow))
+        {
+            transform.position = transform.position + new Vector3(-1, 0, 0);
+        }
+        if(Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow))
+        {
+            transform.position = transform.position + new Vector3(1, 0, 0);
+        }
+
         if(Input.GetMouseButtonUp(0) && !isClicking)
         {
             Vector3 mousePos = Input.mousePosition;
