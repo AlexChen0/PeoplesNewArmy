@@ -1,0 +1,2 @@
+Enemy	Level	Health	HPMax	Attack	Magic	Def	MDef	Speed	Stam	StmMax	Move	EquPtr
+Enemy1	2	20	33	14	2	45	11	6	143	150	5	1
