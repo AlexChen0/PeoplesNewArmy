@@ -25,9 +25,11 @@ public class TurnController : MonoBehaviour
         {
             case turn.Player:
                 currentTurn = turn.Enemy;
+                //run through the playerUnitManager
                 break;
             case turn.Enemy:
                 currentTurn = turn.Player;
+                //run through the gamestate file in the enemy's folder
                 break;
         }
     }

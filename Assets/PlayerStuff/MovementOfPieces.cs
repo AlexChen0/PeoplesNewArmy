@@ -7,42 +7,44 @@ public class MovementOfPieces : MonoBehaviour
     private GameObject selection;
     private int selectionindex = -1;
     private PlayerUnitManager PUM; 
-    private characteristics chara; 
+    private PlayerStats playerstats;
     public PlayerUnit testing;
-    public EnemyCharacteristics enemyChara;
     public EnemyUnit enemytesting;
     // Start is called before the first frame update
+    public GameObject actionSelector;
+    public GameObject theController;
+
+    public bool canMove = true;
+
     void Start()
     {
         PUM = GetComponent<PlayerUnitManager>();
-        chara = GetComponent<characteristics>();
-        enemyChara = GetComponent<EnemyCharacteristics>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow))
+        if(canMove && (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow)))
         {
             transform.position = transform.position + new Vector3(0, 1, 0);
         }
-        if(Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow))
+        if(canMove && (Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow)))
         {
             transform.position = transform.position + new Vector3(0, -1, 0);
         }
-        if(Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow))
+        if(canMove && (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow)))
         {
             transform.position = transform.position + new Vector3(-1, 0, 0);
         }
-        if(Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow))
+        if(canMove && (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow)))
         {
             transform.position = transform.position + new Vector3(1, 0, 0);
         }
-        if(Input.GetKeyDown(KeyCode.Escape))
+        if(canMove && Input.GetKeyDown(KeyCode.Escape))
         {
             selectionindex = -1;
         }
-        if(Input.GetKeyDown(KeyCode.Space))
+        if(canMove && Input.GetKeyDown(KeyCode.Space))
         {
             //assign variables that associate with the selector's x and y coordinates
             if(selectionindex == -1)
@@ -53,21 +55,28 @@ public class MovementOfPieces : MonoBehaviour
                     && transform.position.y == PUM.PlayerUnits[i].transform.position.y)
                     {
                         selectionindex = i;
-                        testing = chara.getUnit(PUM.PlayerUnits[i].name);
-                        Debug.Log(testing.level);
+                        //we need to find the movement distance that is covered by this particular player. How do we do this?
+                        playerstats = PUM.PlayerUnits[i].GetComponent<PlayerStats>();
                         break;
                     }
                 }
-
+   
             }
             else
             {
                 if(Mathf.Abs((transform.position.x - PUM.PlayerUnits[selectionindex].transform.position.x) 
-                            + transform.position.y - PUM.PlayerUnits[selectionindex].transform.position.y) < 5.1) // in movement range
+                            + transform.position.y - PUM.PlayerUnits[selectionindex].transform.position.y) < playerstats.move) // in movement range
                 {
 
                     PUM.PlayerUnits[selectionindex].transform.position = transform.position;
                     selectionindex = -1;
+
+                    actionSelector.SetActive(true);
+                    canMove = false;
+                    //will need to think of alternative workaround
+                    //theController.SetActive(false);
+                    //wake up the UI that selects for attacking
+                        //see script that handles attacking, attached to attack button
                 }
                 else
                 {

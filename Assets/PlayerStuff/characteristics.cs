@@ -5,6 +5,7 @@ using UnityEditor;
 using System;
 using System.IO;
 //using Weapons; //something about static classes
+using System.Data;
 
 public class characteristics : MonoBehaviour
 {
@@ -85,13 +86,12 @@ public class characteristics : MonoBehaviour
     public PlayerUnit getUnit(string name)
     {
         var dataset = Resources.Load<TextAsset>("PlayerCharacter");
-        //Debug.Log(dataset);
         var lines = dataset.text.Split('\n'); //splitting up into lines
 
         //int i = sprite that is specified in unity
         PlayerUnit targetPlayer;
         int targetline = -1;
-        for(int i = 0; i < lines.Length; i++)
+        for(int i = 1; i < lines.Length; i++)
         {
             var data = lines[i].Split('\t');
             var list = new List<string>(data);
@@ -137,6 +137,59 @@ public class characteristics : MonoBehaviour
         
     }
 
+    public PlayerUnit getUnit(int index)
+    {
+        var dataset = Resources.Load<TextAsset>("PlayerCharacter");
+        var lines = dataset.text.Split('\n'); //splitting up into lines
+
+        //int i = sprite that is specified in unity
+        PlayerUnit targetPlayer;
+        int targetline = -1;
+        for(int i = 1; i < lines.Length; i++)
+        {
+            var data = lines[i].Split('\t');
+            var list = new List<string>(data);
+            if(index + 1 == i)
+            {
+                Debug.Log("target found");
+                targetline = i;
+                break;
+            }
+        }
+        if(targetline == -1)
+        {
+            Debug.Log("Error: invalid player");
+            throw new InvalidOperationException("Player does not exist");
+        }
+        else
+        {
+            var data = lines[targetline].Split('\t'); //i will be the line the selected sprite is specified
+            var list = new List<string>(data); //make a List with the sprites stats
+            targetPlayer.level = Convert.ToInt32(list[1]);
+            targetPlayer.health = Convert.ToInt32(list[2]);
+            targetPlayer.maxHealth = Convert.ToInt32(list[3]);
+            targetPlayer.pAttack = Convert.ToInt32(list[4]);
+            targetPlayer.mAttack = Convert.ToInt32(list[5]);
+            targetPlayer.pDefense = Convert.ToInt32(list[6]);
+            targetPlayer.mDefense = Convert.ToInt32(list[7]);
+            targetPlayer.speed = Convert.ToInt32(list[8]);
+            targetPlayer.stamina = Convert.ToInt32(list[9]);
+            targetPlayer.maxStamina = Convert.ToInt32(list[10]);
+            targetPlayer.movement = Convert.ToInt32(list[11]);
+            targetPlayer.unitPriorityModifier = Convert.ToInt32(list[12]);
+            targetPlayer.equipmentPointer = Convert.ToInt32(list[13]);
+            targetPlayer.healthGrowth = Convert.ToInt32(list[14]);
+            targetPlayer.attackGrowth = Convert.ToInt32(list[15]);
+            targetPlayer.magicGrowth = Convert.ToInt32(list[16]);
+            targetPlayer.defenseGrowth = Convert.ToInt32(list[17]);
+            targetPlayer.mdefenseGrowth = Convert.ToInt32(list[18]);
+            targetPlayer.speedGrowth = Convert.ToInt32(list[19]);
+            targetPlayer.staminaGrowth = Convert.ToInt32(list[20]);
+            targetPlayer.availability = Convert.ToInt32(list[21]);
+            return targetPlayer;
+        }
+        
+    }
 }
 public struct PlayerUnit
 {
@@ -162,5 +215,4 @@ public struct PlayerUnit
     public int speedGrowth;
     public int staminaGrowth;
     public int availability;
-
 }

@@ -16,17 +16,62 @@ public class EnemyCharacteristics : MonoBehaviour
     public EnemyUnit getEnemy(string name)
     {
         var dataset = Resources.Load<TextAsset>("Enemies");
-        Debug.Log(dataset);
         var lines = dataset.text.Split('\n'); //splitting up into lines
 
         //int i = sprite that is specified in unity
         EnemyUnit targetEnemy;
         int targetline = -1;
-        for(int i = 0; i < lines.Length; i++)
+        for(int i = 1; i < lines.Length; i++)
         {
             var data = lines[i].Split('\t');
             var list = new List<string>(data);
             if(Equals(list[0].ToString(), name))
+            {
+                Debug.Log("target found");
+                targetline = i;
+                break;
+            }
+        }
+        if(targetline == -1)
+        {
+            Debug.Log("Error: invalid Enemy");
+            throw new InvalidOperationException("Enemy does not exist");
+        }
+        else
+        {
+            var data = lines[targetline].Split('\t'); //i will be the line the selected sprite is specified
+            var list = new List<string>(data); //make a List with the sprites stats
+            targetEnemy.level = Convert.ToInt32(list[1]);
+            targetEnemy.health = Convert.ToInt32(list[2]);
+            targetEnemy.maxHealth = Convert.ToInt32(list[3]);
+            targetEnemy.pAttack = Convert.ToInt32(list[4]);
+            targetEnemy.mAttack = Convert.ToInt32(list[5]);
+            targetEnemy.pDefense = Convert.ToInt32(list[6]);
+            targetEnemy.mDefense = Convert.ToInt32(list[7]);
+            targetEnemy.speed = Convert.ToInt32(list[8]);
+            targetEnemy.stamina = Convert.ToInt32(list[9]);
+            targetEnemy.maxStamina = Convert.ToInt32(list[10]);
+            targetEnemy.movement = Convert.ToInt32(list[11]);
+            targetEnemy.equipmentPointer = Convert.ToInt32(list[12]);
+            return targetEnemy;
+        }
+        
+    }
+    
+    //start from 0 when calling this
+    public EnemyUnit getEnemy(int index)
+    {
+        var dataset = Resources.Load<TextAsset>("Enemies");
+        var lines = dataset.text.Split('\n'); //splitting up into lines
+
+        //int i = sprite that is specified in unity
+        EnemyUnit targetEnemy;
+        int targetline = -1;
+        for(int i = 1; i < lines.Length; i++)
+        {
+            var data = lines[i].Split('\t');
+            var list = new List<string>(data);
+            if(index + 1 == i)
             {
                 Debug.Log("target found");
                 targetline = i;
@@ -75,7 +120,6 @@ public struct EnemyUnit
     public int movement;
     //enemy invisible stats
     public int equipmentPointer;
-
 }
 /*
 [System.Serializable]
