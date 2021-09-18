@@ -16,10 +16,9 @@ public class GameState : MonoBehaviour
     List<GameObject> myUnitID = PUM.enemyUnits;
     List<GameObject> enemyUnitID = PUM.PlayerUnits;
 
-	//Map<Integer, CombatUnit> units;
     Dictionary<GameObject, CombatUnit> units;
-	List<CombatUnit> myUnitList;
-	List<CombatUnit> enemyUnitList;
+	List<EnemyStats> myUnitList;
+	List<EnemyStats> enemyUnitList;
 
 	double currentStateUtility;
 	bool utilityWasCalculated;
@@ -33,24 +32,15 @@ public class GameState : MonoBehaviour
 	
 	
 	/*
-	 * REPLACE WITH ENEMY CHARACTERISTICS
+	 * REPLACE WITH ENEMYSTATS?
 	 */
 	private class CombatUnit{
         private int xPosition;
         private int yPosition;
-        private int id;
         private int attackDamage;
         private int range;
         private int baseHealth;
         private int currentHealth;
-
-        private CombatUnit(int id){
-            this.id = id;
-        }
-
-        public int EntityId() {
-            return id;
-        }
 
         public int getXPosition() {
             return xPosition; //get from unity
@@ -534,6 +524,7 @@ public class GameState : MonoBehaviour
         return gameStateChildren;
     }
 
+    /* uncomment when action is set up
     private List<List<Action>> generateActionCombinations(List<List<Action>> combinations, List<Action> newActions) {
         List<List<Action>> newCombinations = new ArrayList<>();
         foreach (Action action in newActions) {
@@ -545,6 +536,7 @@ public class GameState : MonoBehaviour
         }
         return newCombinations;
     }
+    
 
     // returns a new state with several actions applied
     private GameState newStateFromActions (List<Action> actions) {
@@ -558,6 +550,7 @@ public class GameState : MonoBehaviour
 
         return newState;
     }
+    
 
     // applies a single action to this state
     // assumes the action is valid
@@ -645,4 +638,5 @@ public class GameState : MonoBehaviour
                     && Math.abs(unit.getYPosition() - targetUnit.getYPosition()) <= unit.getRange();
         }
     }
+    */
 }

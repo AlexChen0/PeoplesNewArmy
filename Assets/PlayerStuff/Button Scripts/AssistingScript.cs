@@ -6,7 +6,7 @@ using System;
 using System.IO;
 using System.Data;
 
-public class attackSelection : MonoBehaviour
+public class AssistingScript : MonoBehaviour
 {
     /*
     public GameObject Selectionbox;

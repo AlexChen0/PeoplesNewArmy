@@ -1,6 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using System;
+using System.IO;
+using System.Data;
 
 public class EnemyStats : MonoBehaviour
 {
@@ -11,13 +15,13 @@ public class EnemyStats : MonoBehaviour
     public int attack;
     public int magic;
     public int defense;
-    public int magicdefense;
+    public int magicDefense;
     public int speed;
     public int stamina;
-    public int maxstamina;
+    public int maxStamina;
     public int move;
     public int equipment; //similiar idea here, will need to replace with a struct that describes equipment
-    public int hasmoved;
+    public int hasMoved;
     // Start is called before the first frame update
     void Start()
     {
@@ -73,13 +77,13 @@ public class EnemyStats : MonoBehaviour
                 string[] columnheaders = streamreader.ReadLine().Split(delimiter);
 
                 string line;
-                int j = 1;
+                int j = 1; //idk what this does in either stat script but I wont fuck with it LMAO 
                 while ((line = streamreader.ReadLine()) != null)
                 {
                     string[] lin = line.Split(stringDelimit, StringSplitOptions.None);
                     string[] again = lin[0].Split(delimiter);
                     for (int i = 0; i < again.Length; i++) {
-                        for(int j = 0; j < 14; j++) //14 is a hard coded value for the variable count. 
+                        for(int k = 0; k < 14; k++) //14 is a hard coded value for the variable count. 
                         {
                             if(again[0] == playerName)
                             {

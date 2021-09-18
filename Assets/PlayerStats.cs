@@ -30,7 +30,7 @@ public class PlayerStats : MonoBehaviour
     public int mdefenseGrowth;
     public int speedGrowth;
     public int staminaGrowth;
-    public bool hasMoved;
+    public int hasMoved;
 
     // Start is called before the first frame update
     void Start()
@@ -102,7 +102,7 @@ public class PlayerStats : MonoBehaviour
             string[] lin = line.Split(stringDelimit, StringSplitOptions.None);
             string[] again = lin[0].Split(delimiter);
             for (int i = 0; i < again.Length; i++) {
-                for(int j = 0; j < 22; j++) //22 is a hard coded value for the variable count. 
+                for(int k = 0; k < 22; k++) //22 is a hard coded value for the variable count. 
                 {
                     if(again[0] == playerName)
                     {

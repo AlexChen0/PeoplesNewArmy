@@ -11,12 +11,11 @@ public class AttackHandler : MonoBehaviour
     //transform.position
     public GameObject Selectionbox;
     public PlayerUnitManager PUM; 
-    public characteristics chara; 
-    public EnemyCharacteristics enemyChara;
+    public PlayerStats pstats; 
+    //estats is not needed here, but will be needed in attackselection
+    //public EnemyStats estats;
     public Vector2 coords = new Vector2(0,0);
     public int SI = 0;
-
-    public PlayerUnit attackingUnit;
     public List<EnemyUnit> targetableEnemies = new List<EnemyUnit>();
 
     public GameObject popUpBox;
@@ -29,8 +28,6 @@ public class AttackHandler : MonoBehaviour
         Debug.Log("AttackHandler was called!");
         Selectionbox = GameObject.Find("Controller");
         PUM = Selectionbox.GetComponent<PlayerUnitManager>();
-        chara = Selectionbox.GetComponent<characteristics>();
-        enemyChara = Selectionbox.GetComponent<EnemyCharacteristics>();
 
         for(int i = 0; i < PUM.PlayerUnits.Count; i++)
         {
@@ -38,12 +35,12 @@ public class AttackHandler : MonoBehaviour
             && Selectionbox.transform.position.y == PUM.PlayerUnits[i].transform.position.y)
             {
                 SI = i;
+                //pstats we will find the closest gameobject to the selectionbox, and then use that
+                pstats = PUM.PlayerUnits[i].GetComponent<PlayerStats>();
                 break;
             }
         }
         //now this can be used alongside characteristics
-
-        attackingUnit = chara.getUnit(SI);
         
         var Enemydataset = Resources.Load<TextAsset>("Enemies");
         var lines = Enemydataset.text.Split('\n');

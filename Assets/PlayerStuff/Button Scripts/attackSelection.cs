@@ -37,6 +37,7 @@ public class attackSelection : MonoBehaviour
     public AttackHandler AH;
     public Weapons Wp;
     public AttackingScript AS;
+    public EnemyStats estats;
 
     public int targetSelection = 0;
     public int weaponSelection = 0;
@@ -71,7 +72,7 @@ public class attackSelection : MonoBehaviour
                 targetSelection--;
             else
                 targetSelection = AH.targetableEnemies.Count - 1;
-
+            estats = PUM.EnemyUnits[targetSelection].getComponent<EnemyStats>();
             updateStats();
         }
         if(Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow))
@@ -80,7 +81,7 @@ public class attackSelection : MonoBehaviour
                 targetSelection++;
             else
                 targetSelection = 0;
-
+            estats = PUM.EnemyUnits[targetSelection].getComponent<EnemyStats>();
             updateStats();
         }
         if(Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow))
@@ -114,12 +115,12 @@ public class attackSelection : MonoBehaviour
             AH.Selectionbox.GetComponent<MovementOfPieces>().canMove = true;
 
             //we now make the attack
-            int hitrate = AS.PHitrate(AH.attackingUnit, AH.targetableEnemies[targetSelection], Wp.setWeapon(data[weaponSelection + 1], data[weaponSelection + 2], Convert.ToInt32(data[weaponSelection + 3])));
+            int hitrate = AS.PHitrate(AH.pstats, estats, Wp.setWeapon(data[weaponSelection + 1], data[weaponSelection + 2], Convert.ToInt32(data[weaponSelection + 3])));
             bool itHit = UnityEngine.Random.Range(1, 100) < hitrate;
 
             if (itHit)
             {
-                int healthAfterDamage = AH.targetableEnemies[targetSelection].health - AS.PAttackDamage(AH.attackingUnit, AH.targetableEnemies[targetSelection], Wp.setWeapon(data[weaponSelection + 1], data[weaponSelection + 2], Convert.ToInt32(data[weaponSelection + 3])));;
+                int healthAfterDamage = estats.health - AS.PAttackDamage(AH.pstats, estats, Wp.setWeapon(data[weaponSelection + 1], data[weaponSelection + 2], Convert.ToInt32(data[weaponSelection + 3])));;
 
                 /*
                 //find the enemy to update
@@ -149,6 +150,8 @@ public class attackSelection : MonoBehaviour
                 writer.Close();
                 */
                 // version 2
+                //we will not need this anymore, since we are now direct inserting damage into the estats
+                /*    
                 StreamReader streamreader = new StreamReader("Assets/Resources/Enemies.txt");
                 string enemyFilePath = "Assets/Resources/test.txt";
                 StreamWriter writer = new StreamWriter(enemyFilePath);
@@ -182,6 +185,10 @@ public class attackSelection : MonoBehaviour
                 //MenuItem("Tools/Write file")?
 
                 writer.Close();
+                */
+                //instead we are replacing with the much easier (ideally)
+                estats.health = healthAfterDamage;
+                //we can implement death mechanics here
             }
             
         }
@@ -198,12 +205,12 @@ public class attackSelection : MonoBehaviour
         var data = lines[AH.attackingUnit.equipmentPointer].Split('\t');
         var list = new List<string>(data);
         this.target.text = targetSelection.ToString();
-        this.charaAttack.text = AS.PAttackDamage(AH.attackingUnit, AH.targetableEnemies[targetSelection], Wp.setWeapon(data[weaponSelection + 1], data[weaponSelection + 2], Convert.ToInt32(data[weaponSelection + 3]))).ToString();
-        this.charaHit.text = AS.PHitrate(AH.attackingUnit, AH.targetableEnemies[targetSelection], Wp.setWeapon(data[weaponSelection + 1], data[weaponSelection + 2], Convert.ToInt32(data[weaponSelection + 3]))).ToString();
-        this.charaCrit.text = AS.PCritrate(AH.attackingUnit, AH.targetableEnemies[targetSelection], Wp.setWeapon(data[weaponSelection + 1], data[weaponSelection + 2], Convert.ToInt32(data[weaponSelection + 3]))).ToString();
-        this.enemyAttack.text = AS.EAttackDamage(AH.attackingUnit, AH.targetableEnemies[targetSelection], Wp.setWeapon(data[weaponSelection + 1], data[weaponSelection + 2], Convert.ToInt32(data[weaponSelection + 3]))).ToString();
-        this.enemyHit.text = AS.EHitrate(AH.attackingUnit, AH.targetableEnemies[targetSelection], Wp.setWeapon(data[weaponSelection + 1], data[weaponSelection + 2], Convert.ToInt32(data[weaponSelection + 3]))).ToString();
-        this.enemyCrit.text = AS.ECritrate(AH.attackingUnit, AH.targetableEnemies[targetSelection], Wp.setWeapon(data[weaponSelection + 1], data[weaponSelection + 2], Convert.ToInt32(data[weaponSelection + 3]))).ToString();
+        this.charaAttack.text = AS.PAttackDamage(AH.pstats, estats, Wp.setWeapon(data[weaponSelection + 1], data[weaponSelection + 2], Convert.ToInt32(data[weaponSelection + 3]))).ToString();
+        this.charaHit.text = AS.PHitrate(AH.pstats, estats, Wp.setWeapon(data[weaponSelection + 1], data[weaponSelection + 2], Convert.ToInt32(data[weaponSelection + 3]))).ToString();
+        this.charaCrit.text = AS.PCritrate(AH.pstats, estats, Wp.setWeapon(data[weaponSelection + 1], data[weaponSelection + 2], Convert.ToInt32(data[weaponSelection + 3]))).ToString();
+        this.enemyAttack.text = AS.EAttackDamage(AH.pstats, estats, Wp.setWeapon(data[weaponSelection + 1], data[weaponSelection + 2], Convert.ToInt32(data[weaponSelection + 3]))).ToString();
+        this.enemyHit.text = AS.EHitrate(AH.pstats, estats, Wp.setWeapon(data[weaponSelection + 1], data[weaponSelection + 2], Convert.ToInt32(data[weaponSelection + 3]))).ToString();
+        this.enemyCrit.text = AS.ECritrate(AH.pstats, estats, Wp.setWeapon(data[weaponSelection + 1], data[weaponSelection + 2], Convert.ToInt32(data[weaponSelection + 3]))).ToString();
         this.charaWeapon.text = data[weaponSelection];
         this.enemyWeapon.text = data[weaponSelection];
     }
